@@ -1,8 +1,11 @@
-import React from 'react'
-import Model from "../model/model"
+import React, { useContext } from "react";
+import Model from "../model/model";
+import {TableContext} from '../model/context'
+
 
 const Table = () => {
     const model = Model();
+    const [columns, setColumns] = useContext(TableContext)
     return (
         <div>
             <table className="table">
@@ -13,16 +16,11 @@ const Table = () => {
                   <th>Created</th>
                   <th>Last update</th>
                 </tr>
-                {model.map(data =>(
-                    <tr>
-                        <td >{data.id}</td>
-                        <td >{data.name}</td>
-                        <td >{data.items_count}</td>
-                        <td >{data.created_at}</td>
-                        <td >{data.updated_at}</td>
-                    </tr>
-                ))}
-            </table>
+    {model.map(data => <tr>{columns.map(key => <td>{data[key]}</td>)}</tr>
+                    
+                )}
+             </table>
+            <button>Settings</button>
         </div>
     )
 }
