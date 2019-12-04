@@ -1,2 +1,0 @@
-# PPCBee
-Created with CodeSandbox
