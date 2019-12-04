@@ -1,9 +1,7 @@
 import React, { useState, createContext } from "react";
-/*import { useHistory } from "react-router";*/
 
 export const TableContext = createContext();
 export const TableProvider = props => {
-  /*const history = useHistory();*/
   const [columns, setColumns] = useState([
     "id",
     "name",

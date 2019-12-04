@@ -9,16 +9,3 @@ table, th, td {
 table {
   border-spacing: 5px;
 }
-button{
-  background-color:blue ;
-  border-radius:20%;
-  height:2em;
-  width: 7em;
-}
-button:hover{
-  cursor:pointer;
-}
-button:active{
-  outline:none;
-  border:none;
-}
