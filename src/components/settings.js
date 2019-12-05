@@ -1,32 +1,38 @@
 import React, {useContext, useState} from 'react'
 import {TableContext} from '../model/context'
 import Model from "../model/model";
-const Settings= ()=> {
+const Settings= ()=> { 
     const [columns, setColumns] = useContext(TableContext);
     const model = Model();
-    const [selections, setSelections] = useState([]);
-    const allKeys = Object.keys(model[0]);
-
+    let selections = columns;
     const handleSelect = (e)=>{
-        if(!columns.includes(e.target.value)){
-        setSelections([...selections, e.target.value])
-    }}
+        selections.forEach(selection =>{
+            if(selection.id === e.target.id){
+                selection.checked = !selection.checked
+            }
+        })
+        selections.sort((a, b) => {
+            return a.id - b.id;
+          });
+        
+    }
     const addColumn = (e)=>{
         e.preventDefault();
-        setColumns([...columns, ...selections])
+        setColumns([...selections]);
+        console.log(columns);
     }
     return (
         <div>
             <form onSubmit = {addColumn}>
-                {allKeys.map(key =>(
+                {columns.map(column => 
                 <>    
-                    <label for={key}>{key}</label>    
-                    <input onChange={handleSelect} type="checkbox" value={key} name={key}/>
+                    <label for={column.name}>{column.name}</label>    
+                    <input onClick={handleSelect} type="checkbox" value={column.name} name={column.name} id={column.id} defaultChecked={column.checked}/>
                 </>
-                ))}
+                 )}
                     <input type="submit" value="Save"/>     
             </form>
         </div>
     )
-}
+                }
 export default Settings;

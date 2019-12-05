@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import Model from "../model/model";
-import {TableContext} from '../model/context'
+import {TableContext} from '../model/context';
+import Settings from "./settings";
+
 
 
 const Table = () => {
@@ -10,15 +12,16 @@ const Table = () => {
         <div>
             <table className="table">
                 <tr>
-                  {columns.map(column =>
-                  <th>{column}</th>
-                  )} 
+                  {columns.map(column =>{
+                   return column.checked ? <th>{column.name}</th> : null
+                 })} 
                 </tr>
 
-                {model.map(data => <tr>{columns.map(key => <td>{data[key]}</td>)}</tr>
+                {model.map(data => <tr>{columns.map(key => {return key.checked ? <td>{data[key.name]}</td> :null})}</tr>
                     
                 )}
              </table>
+             <Settings />
         </div>
     )
 }
