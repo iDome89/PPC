@@ -2,6 +2,14 @@
   font-family: sans-serif;
   text-align: center;
 }
+
+html, body, .app {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
 table, th, td {
   border: 1px solid black;
 }
@@ -25,10 +33,24 @@ table {
 }
 .popup_inner {
   position: absolute;
-  left: 25%;
-  right: 25%;
-  top: 25%;
-  bottom: 25%;
+  left: 30%;
+  right: 30%;
+  top: 30%;
+  bottom: 40%;
   margin: auto;
   background: white;
+}
+.edit_input {
+  width:80%;
+  margin-top:70px;
+  padding: 0;
+  border:none;
+  outline:none;
+  border-bottom: solid blue;
+}
+.edit_save{
+  position: absolute;
+  top : 90%;
+  right:50%;
+  bottom:0;
 }
