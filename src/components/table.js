@@ -17,7 +17,7 @@ const Table = () => {
                  })} 
                 </tr>
 
-                {model.map(data => <tr>{columns.map(key => {return key.checked ? <td>{data[key.name]}</td> :null})}</tr>
+                {model.map(data => <tr>{columns.map(key => {return key.checked ? <td className="table_data">{data[key.name]} </td> :null})}</tr>
                     
                 )}
              </table>
