@@ -10,42 +10,30 @@ const Table = () => {
     const [model, setModel] = useState (Model());
     const [columns, setColumns] = useContext(TableContext);
     const [popup, setPopup] = useState({isShown:false});
-    const [prevData, setPrevData] = useState({value:""});
-    const [tableData, setTableData] = useState({value:""});
-    const [index, setIndex] = useState("");
-    const [itemKey, setItemKey] = useState("");
-    function getKeyByValue (object, value) { 
-        for (var prop in object) { 
-            if (object.hasOwnProperty(prop)) { 
-                if (object[prop] === value) 
-                return prop; 
-            } 
-        } 
-    } 
+    const [tableValue, setTableValue] = useState({value:""});
+    const [rowPointer, setRowPointer] = useState("");
+    const [columnPointer, setColumnPointer] = useState("");
+
+  
+    function updateModel(index, key, value) {
+        model[index][key] = value
+      }
+  
     
-    const togglePopup = (e)=>{ 
-       let table = model;
-      let clickedValue = e.target.innerText;
-      let clickedObj = table.filter(obj => getKeyByValue(obj, clickedValue));
-      let key = clickedObj.map(item => getKeyByValue(item, clickedValue));
-      let indexValue = table.findIndex(o => o[key] === clickedValue);
-      setItemKey(key);
-      setIndex(indexValue);
+    const togglePopup = (e, index, key)=>{
+      let chosenValue = e.target.innerText;
+      setColumnPointer(key.name);
+      setRowPointer(index);
       setPopup({...popup, isShown:!popup.isShown});
-      setTableData({value:e.target.innerText});
-      setPrevData({value:e.target.innerText});
+      setTableValue({value:chosenValue});
     }
 
     const handleChange = (ev)=>{
-     setTableData({...tableData, value:ev.target.value})
+     setTableValue({...tableValue, value:ev.target.value})
 }
     const handleUpdate = ()=>{
-        let table = model;
-        let newModel = () => (table[index].itemKey = tableData.value);
-        console.log(newModel)
-        setModel([...table, newModel])
+        updateModel(rowPointer, columnPointer,tableValue.value );
         setPopup({...popup, isShown:!popup.isShown});
-        console.log(model);
 
     }
 
@@ -58,7 +46,7 @@ const Table = () => {
                  })} 
                 </tr>
 
-                {model.map(data => <tr>{columns.map(key => {return key.checked ? <td onClick={togglePopup} className="table_data">{data[key.name]} </td> :null})}</tr>
+                {model.map((data, index) => <tr>{columns.map(key => {return key.checked ? <td onClick={(e) => togglePopup(e, index, key)} className="table_data">{data[key.name]} </td> :null})}</tr>
                     
                 )}
              </table>
@@ -66,7 +54,7 @@ const Table = () => {
              {popup.isShown ? 
                 <div className='popup'>
                 <div className='popup_inner'>
-                    <input className= "edit_input" onChange={handleChange} type="text" defaultValue={tableData.value} />
+                    <input className= "edit_input" onChange={handleChange} type="text" defaultValue={tableValue.value} />
                     <button onClick={handleUpdate} className= "edit_save" value="Save">Save</button>
                 </div>
               </div>
