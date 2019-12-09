@@ -10,17 +10,42 @@ const Table = () => {
     const [model, setModel] = useState (Model());
     const [columns, setColumns] = useContext(TableContext);
     const [popup, setPopup] = useState({isShown:false});
+    const [prevData, setPrevData] = useState({value:""});
     const [tableData, setTableData] = useState({value:""});
-    const togglePopup = (e)=>{
+    const [index, setIndex] = useState("");
+    const [itemKey, setItemKey] = useState("");
+    function getKeyByValue (object, value) { 
+        for (var prop in object) { 
+            if (object.hasOwnProperty(prop)) { 
+                if (object[prop] === value) 
+                return prop; 
+            } 
+        } 
+    } 
+    
+    const togglePopup = (e)=>{ 
+       let table = model;
+      let clickedValue = e.target.innerText;
+      let clickedObj = table.filter(obj => getKeyByValue(obj, clickedValue));
+      let key = clickedObj.map(item => getKeyByValue(item, clickedValue));
+      let indexValue = table.findIndex(o => o[key] === clickedValue);
+      setItemKey(key);
+      setIndex(indexValue);
       setPopup({...popup, isShown:!popup.isShown});
       setTableData({value:e.target.innerText});
+      setPrevData({value:e.target.innerText});
     }
 
     const handleChange = (ev)=>{
      setTableData({...tableData, value:ev.target.value})
 }
-    const handleUpdate = (e)=>{
+    const handleUpdate = ()=>{
+        let table = model;
+        let newModel = () => (table[index].itemKey = tableData.value);
+        console.log(newModel)
+        setModel([...table, newModel])
         setPopup({...popup, isShown:!popup.isShown});
+        console.log(model);
 
     }
 

@@ -19,7 +19,6 @@ const Settings= ()=> {
     const addColumn = (e)=>{
         e.preventDefault();
         setColumns([...selections]);
-        console.log(columns);
     }
     return (
         <div>
