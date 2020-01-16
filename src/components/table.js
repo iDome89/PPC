@@ -1,30 +1,31 @@
 import React, { useState, useContext } from "react";
-import {TableContext} from '../model/context';
+import { TableContext } from '../model/context';
 import Settings from "./settings";
 import Model from "../model/model"
-
 
 
 
 const Table = () => {
     const [model, setModel] = useState (Model());
     const [columns, setColumns] = useContext(TableContext);
-    const [popup, setPopup] = useState({isShown:false});
+    // CR: tady staci bohate useState(false)
+    const [popup, setPopup] = useState(undefined);
+    // CR: tady staci bohate useState('')
     const [tableValue, setTableValue] = useState({value:""});
-    const [rowPointer, setRowPointer] = useState("");
-    const [columnPointer, setColumnPointer] = useState("");
 
-  
     function updateModel(index, key, value) {
         model[index][key] = value
       }
-  
-    
+
+
     const togglePopup = (e, index, key)=>{
       let chosenValue = e.target.innerText;
       setColumnPointer(key.name);
-      setRowPointer(index);
-      setPopup({...popup, isShown:!popup.isShown});
+      if (popup) {
+        setPopup(undefined);
+      } else {
+        setPopup({ index, colmun: key.name});
+      }
       setTableValue({value:chosenValue});
     }
 
@@ -36,31 +37,37 @@ const Table = () => {
         setPopup({...popup, isShown:!popup.isShown});
 
     }
+    const enabledColumns = columns.filter((key) => key.checked);
 
     return (
         <div>
             <table className="table">
                 <tr>
-                  {columns.map(column =>{
-                   return column.checked ? <th>{column.name}</th> : null
-                 })} 
+                  {enabledColumns.map(column => <th>{column.name}</th>)}
                 </tr>
+                // CR: v tomhle zapisu by se prase vyznalo
+                // nepouziti key={}
+                // nereflektovani toho co se ma zobrazit (datum time ago)
+                {model.map((data, index) =>
+                  <tr key={data.id}>
+                    {enabledColumns.map(column =>
+                      <td key={column} onClick={(e) => togglePopup(e, index, column)} className="table_data">{data[column.name]} </td>
+                      )
+                    }
+                  </tr>
 
-                {model.map((data, index) => <tr>{columns.map(key => {return key.checked ? <td onClick={(e) => togglePopup(e, index, key)} className="table_data">{data[key.name]} </td> :null})}</tr>
-                    
                 )}
              </table>
              <Settings />
-             {popup.isShown ? 
+             {popup.isShown &&
                 <div className='popup'>
-                <div className='popup_inner'>
-                    <input className= "edit_input" onChange={handleChange} type="text" defaultValue={tableValue.value} />
-                    <button onClick={handleUpdate} className= "edit_save" value="Save">Save</button>
+                  <div className='popup_inner'>
+                      <input className="edit_input" onChange={handleChange} type="text" value={tableValue.value} />
+                      <button onClick={handleChange({target: {value: ''}})}>X</button>
+                      <button onClick={handleUpdate} className= "edit_save" value="Save">Save</button>
+                  </div>
                 </div>
-              </div>
-        
-          : null
-        }
+              }
         </div>
     )
 }
